@@ -1240,7 +1240,7 @@ if (!class_exists('dbConnect')) {
     			return true;	
     		}
     	}
-    	empty($after_field) ? $position = ' FIRST' : $position = 'AFTER '.$after_field;
+    	empty($after_field) ? $position = ' FIRST' : $position = ' AFTER '.$after_field;
     	$this->setSQL("ALTER TABLE ".$this->getTableName()." ADD ".$field." ".$type.$position);
     	if ($this->simulate) return true;
     	try {
