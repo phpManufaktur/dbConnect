@@ -1,20 +1,13 @@
 <?php
 
-
 /**
-  Module developed for the Open Source Content Management System Website Baker (http://websitebaker.org)
-  Copyright (c) 2008, Ralf Hertsch
-  Contact me: hertsch(at)berlin.de, http://phpManufaktur.de
-
-  This module is free software. You can redistribute it and/or modify it
-  under the terms of the GNU General Public License  - version 2 or later,
-  as published by the Free Software Foundation: http://www.gnu.org/licenses/gpl.html.
-
-  This module is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-**/
+ * dbConnect
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ * @link https://addons.phpmanufaktur.de/de/addons/dbconnect.php
+ * @copyright 2007-2012 phpManufaktur by Ralf Hertsch
+ * @license http://www.gnu.org/licenses/gpl.html GNU Public License (GPL)
+ */
 
 // prevent this file from being accesses directly
 if(defined('WB_PATH') == false) {
@@ -24,12 +17,12 @@ if(!file_exists(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/' .
   require_once(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/EN.php'); }
 else {
   require_once(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/' .LANGUAGE .'.php'); }
-  
+
 // Load the unit with the required sample class
 require_once(WB_PATH.'/modules/'.basename(dirname(__FILE__)).'/class.sample.php');
 
 // template for frontend view
-$view_template = 
+$view_template =
   '<div class="dbconnect">
     <h2>{header}</h2>
     <div class="dbconnect_intro">{intro}</div>
@@ -100,11 +93,11 @@ $data = array();
 if (!$dbSample->sqlSelectRecord($where, $data)) {
   // die on SQL error and prompt error message
   die($dbSample->getError()); }
-  
+
 if (sizeof($data) < 1) {
   // error: no data for this $section_id...
   die(sprintf(dbc_error_no_data, $section_id)); }
- 
+
 // show table structure and informations
 if (!$dbSample->sqlDescribeTable($description)) {
   die($dbSample->getError()); }
@@ -125,7 +118,7 @@ $parseArray = array(
   'last_modified'     => date('d.m.Y - H:i:s', $data[0]['last_modified']),
   'table_description' => dbc_table_description,
   'header_field'      => dbc_header_field,
-  'header_type'       => dbc_header_type,  
+  'header_type'       => dbc_header_type,
   'header_null'       => dbc_header_null,
   'header_key'        => dbc_header_key,
   'header_default'    => dbc_header_default,
@@ -137,7 +130,7 @@ $parseArray = array(
 foreach ($parseArray as $key => $value) {
   $view_template = str_replace("{".$key."}", $value, $view_template); }
 // show completed form...
-echo $view_template;  
+echo $view_template;
 
 
 

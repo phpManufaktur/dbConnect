@@ -1,19 +1,13 @@
 <?php
 
 /**
-  Module developed for the Open Source Content Management System Website Baker (http://websitebaker.org)
-  Copyright (c) 2008, Ralf Hertsch
-  Contact me: hertsch(at)berlin.de, http://phpManufaktur.de
-
-  This module is free software. You can redistribute it and/or modify it
-  under the terms of the GNU General Public License  - version 2 or later,
-  as published by the Free Software Foundation: http://www.gnu.org/licenses/gpl.html.
-
-  This module is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-**/
+ * dbConnect
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ * @link https://addons.phpmanufaktur.de/de/addons/dbconnect.php
+ * @copyright 2007-2012 phpManufaktur by Ralf Hertsch
+ * @license http://www.gnu.org/licenses/gpl.html GNU Public License (GPL)
+ */
 
 // prevent this file from being accesses directly
 if(defined('WB_PATH') == false) {
@@ -23,12 +17,12 @@ if(!file_exists(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/' .
   require_once(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/EN.php'); }
 else {
   require_once(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/' .LANGUAGE .'.php'); }
-  
+
 // Load the unit with the required sample class
 require_once(WB_PATH.'/modules/'.basename(dirname(__FILE__)).'/class.sample.php');
-  
+
 // Template with placeholders for all needed variables
-$modify_form = 
+$modify_form =
   '<div class="dbconnect">
     <form name="ps_adresse_modify" action="{form_action}" method="post">
     <input type="hidden" name="page_id" value="{page_id}">
@@ -65,7 +59,7 @@ $modify_form =
         <td>&nbsp;</td>
         <td>
           <input type="submit" name="submit" value="{btn_save}">&nbsp;
-          <input name="ps_abort" type="button" value="{btn_abort}" onclick="javascript: window.location = \'{abort_location}\'; return false;"/> 
+          <input name="ps_abort" type="button" value="{btn_abort}" onclick="javascript: window.location = \'{abort_location}\'; return false;"/>
         </td>
       </tr>
     </table>
@@ -74,13 +68,13 @@ $modify_form =
 
 // create a new instance of sample_dbConnect();
 $dbSample = new sample_dbConnect();
-  
+
 
 if ((isset($_REQUEST['action'])) && ($_REQUEST['action'] == 'update')) {
   /**
    * the form has changed, take the values to the table...
-   */ 
-  // Selection criteria for the record to update is the section_id 
+   */
+  // Selection criteria for the record to update is the section_id
   $where = array();
   $where['section_id'] = $section_id;
   // create a empty record and insert the values
@@ -109,7 +103,7 @@ $data = array();
 if (!$dbSample->sqlSelectRecord($where, $data)) {
   // error while executing SQL, prompt error...
   $admin->print_error($dbSample->getError()); }
-  
+
 if (sizeof($data) < 1) {
   // error: no data for this $section_id...
   $admin->print_error(sprintf(dbc_error_no_data, $section_id)); }
@@ -117,10 +111,10 @@ if (sizeof($data) < 1) {
 /**
  * &$data contains the result of the SQL query and could contain more than only one record,
  * therefore the structure of &$data is a multidimensional array with the structure:
- * 
- * $data = array([0] => array([field_1] => value_1 [field_2] => value_2) [1] => array( ... ) ... )  
+ *
+ * $data = array([0] => array([field_1] => value_1 [field_2] => value_2) [1] => array( ... ) ... )
  */
-  
+
 // assign variables to placeholders of the template
 $parseArray = array(
   'form_action'     => WB_URL.'/admin/pages/modify.php?page_id='.$page_id,
@@ -140,11 +134,11 @@ $parseArray = array(
   'btn_save'        => dbc_btn_save,
   'btn_abort'       => dbc_btn_abort,
   'abort_location'  => WB_URL.'/admin/pages/index.php'
-); 
+);
 
 // replace placeholders with variables
 foreach ($parseArray as $key => $value) {
 	$modify_form = str_replace("{".$key."}", $value, $modify_form); }
 // show completed form...
-echo $modify_form;  
+echo $modify_form;
 ?>

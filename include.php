@@ -1,28 +1,13 @@
 <?php
 
 /**
-
-  Module for the Open Source CMS Website Baker - http://websitebaker.org 
-  (c) 2008 Ralf Hertsch, hertsch@berlin.de, http://phpManufaktur.de 
-   
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  any later version.
-  
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-   
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see http://www.gnu.org/licenses/.
-  
-  PLEASE CHECK THE INFO.PHP FOR VERSION INFORMATIONS AND HISTORY
-   
-  $Id: include.php 25 2010-07-17 02:20:40Z ralf $
- 
-**/
+ * dbConnect
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ * @link https://addons.phpmanufaktur.de/de/addons/dbconnect.php
+ * @copyright 2007-2012 phpManufaktur by Ralf Hertsch
+ * @license http://www.gnu.org/licenses/gpl.html GNU Public License (GPL)
+ */
 
 if(!file_exists(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/' .LANGUAGE .'.php')) {
   require_once(WB_PATH .'/modules/'.basename(dirname(__FILE__)).'/languages/EN.php'); }
@@ -52,22 +37,22 @@ if (!class_exists('dbConnect')) {
       'username'  => DB_USERNAME,
       'password'  => DB_PASSWORD,
       'dbname'    => DB_NAME,
-      'dbport'    => 3306, 
+      'dbport'    => 3306,
       'dbsocket'  => ''
     );
 
     // Formatter for error strings
     const error_prompt = '<p>[%s - %s] <strong>%s</strong></p>';
 		const error_db_not_connected = 'Database is not connected!';
-		
+
 		const engine_myisam			= 'MyISAM';
 		const engine_innodb			= 'InnoDB';
 		const engine_heap				= 'HEAP';
-		
+
 		const charset_latin1		= 'latin1';
 		const charset_latin2		= 'latin2';
 		const charset_utf8			= 'utf8';
-		
+
 		const collate_latin1_bin						= 'latin1_bin';
 		const collate_latin1_danish_ci			= 'latin1_danish_ci';
 		const collate_latin1_general_ci			= 'latin1_general_ci';
@@ -83,7 +68,7 @@ if (!class_exists('dbConnect')) {
      * Predefined values for dbConnect
      */
     public    $isConnected        = false;
-    private   $dbc_error          = ''; 
+    private   $dbc_error          = '';
     private   $tableName          = '';
     private   $module_name        = '';
     private   $module_directory   = '';
@@ -95,7 +80,7 @@ if (!class_exists('dbConnect')) {
     private		$engine							= self::engine_myisam;
     private 	$charset						= self::charset_utf8;
     private		$collate						= self::collate_utf8_general_ci;
-    private		$decode_special_chars = true;				
+    private		$decode_special_chars = true;
     protected $fieldDefinition    = array();
     protected $fields             = array();
     protected $searchableFields   = array();
@@ -104,7 +89,7 @@ if (!class_exists('dbConnect')) {
     protected $csvMustFields			= array();
     protected $indexFields				= array();
     protected $foreignKeys				= array();
-    
+
     protected $foreignKey = array(
     	'field'						=> '',
     	'foreign_table'		=> '',
@@ -238,7 +223,7 @@ if (!class_exists('dbConnect')) {
         $this->setError(sprintf(self::error_prompt, __METHOD__, $except->getLine(), $except->getMessage()));
       }
     } // __construct()
-		
+
     /*
      * Close the database connection
      */
@@ -248,8 +233,8 @@ if (!class_exists('dbConnect')) {
     		$this->isConnected = false;
   		}
   	} // __destruct()
-  
-  
+
+
     /**
      * Execute ab query and return the the, if available, by
      * reference &$result.
@@ -259,12 +244,12 @@ if (!class_exists('dbConnect')) {
      * @return BOOL
      */
     public function query($query, &$result=false) {
-      if (!$this->isConnected) { 
+      if (!$this->isConnected) {
         $this->setError(sprintf(self::error_prompt, __METHOD__, __LINE__, self::error_db_not_connected));
         return false;
       }
-      try { 
-        $result = parent::query($query); 
+      try {
+        $result = parent::query($query);
         if ($this->error) {
           throw new Exception($this->error); }
         return true;
@@ -325,7 +310,7 @@ if (!class_exists('dbConnect')) {
      * @param STR $error
      */
     public function setError($error) {
-      $this->dbc_error = $error; 
+      $this->dbc_error = $error;
     }
 
     /**
@@ -480,7 +465,7 @@ if (!class_exists('dbConnect')) {
     public function setDecodeSpecialChars($decode=true) {
     	$this->decode_special_chars = $decode;
     }
-    
+
     /**
      * SET SQL Code
      *
@@ -512,8 +497,8 @@ if (!class_exists('dbConnect')) {
       $this->setSQL($sqlCode);
       if ($this->simulate) return true;
       try {
-        $sql_result = false; 
-        if (!$this->query($this->getSQL(), $sql_result)) { 
+        $sql_result = false;
+        if (!$this->query($this->getSQL(), $sql_result)) {
           throw new Exception($this->getError()); }
         // $sql_result may be boolean or a object...
         if (is_object($sql_result)) {
@@ -555,7 +540,7 @@ if (!class_exists('dbConnect')) {
 
     /**
      * Return the FIELDS of the table
-     * 
+     *
      * @return ARRAY
      */
     public function getFields() {
@@ -572,60 +557,60 @@ if (!class_exists('dbConnect')) {
       // empty table name
       if (strlen($this->tableName) == 0) {
         $this->setError(sprintf(dbConnect_error_emptyTableName,__METHOD__, __LINE__));
-        return false; }        
+        return false; }
       // no field definitions...
       if (count($this->fieldDefinition) < 1) {
         $this->setError(sprintf(dbConnect_error_noFieldDefinitions, __METHOD__, __LINE__));
-        return false; }        
+        return false; }
       // no primary key
       if (strlen($this->field_PrimaryKey) == 0) {
         $this->setError(sprintf(dbConnect_error_noPrimaryKey, __METHOD__, __LINE__));
-        return false;  }        
+        return false;  }
       // ok - no error switch to  no_error
-      $this->resetError(); 
+      $this->resetError();
       return true;
     }
-    
+
     public function setIndexFields($index_fields) {
     	$this->indexFields = $index_fields;
     } // setIndexFields
-    
+
     public function getIndexFields() {
     	return $this->indexFields;
     }
-    
+
     public function setForeignKeys($foreign_keys) {
     	$this->foreignKeys = $foreign_keys;
     }
-    
+
     public function getForeignKeys() {
     	return $this->foreignKeys;
     }
-    
+
     public function setEngine($engine) {
     	$this->engine = $engine;
     }
-    
+
     public function getEngine() {
     	return $this->engine;
     }
-    
+
     public function setCharset($charset) {
     	$this->charset = $charset;
     }
-    
+
     public function getCharset() {
     	return $this->charset;
     }
-    
+
     public function setCollate($collate) {
     	$this->collate = $collate;
     }
-    
+
     public function getCollate() {
     	return $this->collate;
     }
-    
+
     public function setDefaultCharset($charset, $collate) {
     	$this->setCharset($charset);
     	$this->setCollate($collate);
@@ -642,17 +627,17 @@ if (!class_exists('dbConnect')) {
       $sqlQuery = sprintf('CREATE TABLE IF NOT EXISTS `%s` ( ', $this->getTableName());
       for ($i=0; $i < count($this->fieldDefinition); $i++) {
         $sqlQuery .= sprintf("`%s` %s,", $this->fieldDefinition[$i]['field'], $this->fieldDefinition[$i]['type']);  }
-      $sqlQuery .= sprintf('PRIMARY KEY (%s)', $this->getField_PrimaryKey());     
+      $sqlQuery .= sprintf('PRIMARY KEY (%s)', $this->getField_PrimaryKey());
       if (count($this->getIndexFields()) > 0) {
       	$index = '';
       	foreach ($this->getIndexFields() as $field) {
       		if ($field != $this->getField_PrimaryKey()) {
       			(empty($index)) ? $index = $field : $index .= ','.$field;
       		}
-      	}  
+      	}
       	if (!empty($index)) $sqlQuery .= sprintf(',KEY (%s)', $index);
       }
-      
+
       if (count($this->getForeignKeys()) > 0) {
       	$foreign = '';
       	foreach ($this->foreignKeys as $key) {
@@ -662,7 +647,7 @@ if (!class_exists('dbConnect')) {
       	$this->setEngine('InnoDB');
       }
       $sqlQuery .= sprintf(') ENGINE = %s DEFAULT CHARSET = %s COLLATE = %s', $this->getEngine(), $this->getCharset(), $this->getCollate());
-      $this->setSQL($sqlQuery); 
+      $this->setSQL($sqlQuery);
       if ($this->simulate) return true;
       try {
         if (!$this->query($this->getSQL(), $sql_result)) {
@@ -948,7 +933,7 @@ if (!class_exists('dbConnect')) {
     /**
      * Insert the $data as new record into the table
      * and return the $id of this record
-     * 
+     *
      * @param ARRAY $data
      * @param REFERENCE INT $id
      * @return BOOL
@@ -961,7 +946,7 @@ if (!class_exists('dbConnect')) {
     	return $result;
     }
     */
-    
+
     /**
      * Update the record $where with the data $data.
      * $data and $where must be transmitted as array in the form:
@@ -1031,19 +1016,19 @@ if (!class_exists('dbConnect')) {
           else { $thisQuery .= " AND "; }
           $thisQuery .= "$key='$val'";  }
       }
-      $this->setSQL($thisQuery); 
-      if ($this->simulate) { 
+      $this->setSQL($thisQuery);
+      if ($this->simulate) {
       	return true; }
       else {
-        try { 
-          if (!$this->query($this->getSQL(), $sql_result)) { 
-            throw new Exception($this->getError()); } 
+        try {
+          if (!$this->query($this->getSQL(), $sql_result)) {
+            throw new Exception($this->getError()); }
         }
         catch (Exception $except) {
           $this->setError(sprintf(dbConnect_error_execQuery, __METHOD__, $except->getLine(), $except->getMessage()));
           return false; }
       }
-      $numRows = $sql_result->num_rows; 
+      $numRows = $sql_result->num_rows;
       if ($numRows > 0) {
         for ($i=0; $i < $numRows; $i++) {
           $check = $sql_result->fetch_assoc();
@@ -1203,7 +1188,7 @@ if (!class_exists('dbConnect')) {
 
     /**
      * Check if $field exists in table
-     * 
+     *
      * @param STR $field
      * @return BOOL
      */
@@ -1213,19 +1198,19 @@ if (!class_exists('dbConnect')) {
     	foreach ($describe as $row) {
     		if ($row['Field'] == $field) {
     			// field already exist - exit
-    			return true;	
+    			return true;
     		}
     	}
     	return false;
     } // sqlFieldExists()
-    
+
     /**
      * ALTER TABLE and ADD $field with $type
      * If $after_field is empty, the new field will be placed
      * as first field in the table otherwise behind the specified
      * field.
      * Return TRUE on success or if $field already exists
-     * 
+     *
      * @param STR $field
      * @param STR $type
      * @param STR $after_field
@@ -1237,7 +1222,7 @@ if (!class_exists('dbConnect')) {
     	foreach ($describe as $row) {
     		if ($row['Field'] == $field) {
     			// field already exist - exit
-    			return true;	
+    			return true;
     		}
     	}
     	empty($after_field) ? $position = ' FIRST' : $position = ' AFTER '.$after_field;
@@ -1252,11 +1237,11 @@ if (!class_exists('dbConnect')) {
         return false;  }
       return true;
     } // sqlAddField()
-    
+
     /**
      * ALTER TABLE and DELETE $field
      * Return TRUE on success or if field does NOT EXISTS
-     * 
+     *
      * @param STR $field
      * @return BOOL
      */
@@ -1288,9 +1273,9 @@ if (!class_exists('dbConnect')) {
 
     /**
      * ALTER TABLE and CHANGE $old_field
-     * Rename to $new_field and set $type 
+     * Rename to $new_field and set $type
      * Return TRUE on success or if field does not exists
-     * 
+     *
      * @param STR $old_field
      * @param STR $new_field
      * @param STR $type
@@ -1321,10 +1306,10 @@ if (!class_exists('dbConnect')) {
     	// field not found - return true
     	return true;
     } // sqlAlterTableChangeField()
-    
+
     /**
      * Check, if TABLE exists
-     * 
+     *
      * @return BOOL
      */
     public function sqlTableExists()
@@ -1336,7 +1321,7 @@ if (!class_exists('dbConnect')) {
     		{
     			throw new Exception($this->getError());
     		}
-    		if ($sql_result->num_rows < 1) 
+    		if ($sql_result->num_rows < 1)
     		{
     			$result = false;
     		}
@@ -1351,10 +1336,10 @@ if (!class_exists('dbConnect')) {
     		return false;
     	}
     } // sqlTableExists()
-    
+
     /**
      * Import CSV File into TABLE.
-     * 
+     *
      * @param $csvFile_path STR - path to the CSV file
      * @param &$importCSV ARRAY REFERENCE - returns the imported CSV
      * @param $header BOOL TRUE - assume, that 1. line of CSV contain Fielddescriptions
@@ -1362,7 +1347,7 @@ if (!class_exists('dbConnect')) {
      * @param $length INT - default 1000
      * @param $delimiter CHAR - default ","
      * @param $enclosure CHAR - default "\""
-     * 
+     *
      * @return BOOL
      */
     public function csvImport(&$importCSV, $csvFile_path, $header=true, $duplicates=false, $length=1000, $delimiter=",", $enclosure = "\"") {
@@ -1372,22 +1357,22 @@ if (!class_exists('dbConnect')) {
 			$handle = @fopen ($csvFile_path, "r");
 			if ($handle === false) {
 				$this->setError(sprintf(dbConnect_error_csv_file_no_handle, __METHOD__, __LINE__, basename($csvFile_path)));
-				return false; 
+				return false;
 			}
-			while (($record = fgetcsv($handle, $length, $delimiter, $enclosure)) !== false) {                                                
+			while (($record = fgetcsv($handle, $length, $delimiter, $enclosure)) !== false) {
     		$num = count($record);
     		$rec = array();
     		for ($i=0; $i < $num; $i++) {
     			if ($start) {
-    				if ($header) { 
+    				if ($header) {
     					if (array_key_exists($record[$i], $this->fields)) {
-    						$key[$i] = $record[$i];		
+    						$key[$i] = $record[$i];
     					}
     				}
     				else {
     					// kein Header, Datenreihe!
     					$key[$i] = $this->fields[$i];
-    					$rec[$key[$i]] = $record[$i]; 	    
+    					$rec[$key[$i]] = $record[$i];
     				}
     			}
     			else {
@@ -1397,12 +1382,12 @@ if (!class_exists('dbConnect')) {
     					return false;
     				}
         		$rec[$key[$i]] = $record[$i];
-    		 	}  
+    		 	}
 				}
-    		if ($start) { 
+    		if ($start) {
     			$start = false;
     			if (!$header) {
-    				$importCSV[] = $rec; 
+    				$importCSV[] = $rec;
     			}
     		}
     		else {
@@ -1435,17 +1420,17 @@ if (!class_exists('dbConnect')) {
 
     	return true;
     } // csvImport()
-    
+
     /**
      * Exports the records matching to $where to the CSV File $csvFile_path
-     * 
+     *
      * @param $where ARRAY
      * @param &$exportCSV ARRAY REFERENCE matching records exported to CSV
      * @param $csvFile_path STR path to the CSV file
      * @param $header BOOL - default TRUE, write 1. line with field descriptions
      * @param $delimiter CHAR - default ","
      * @param $enclosure CHAR - default "\""
-     * 
+     *
      * @return BOOL
      */
     public function csvExport($where, &$exportCSV, $csvFile_path, $header=true, $delimiter=",", $enclosure = "\"") {
@@ -1456,7 +1441,7 @@ if (!class_exists('dbConnect')) {
     	$handle = @fopen($csvFile_path, "w");
     	if ($handle === false) {
 				$this->setError(sprintf(dbConnect_error_csv_file_no_handle, __METHOD__, __LINE__, basename($csvFile_path)));
-				return false; 
+				return false;
 			}
 			$start = true;
 			foreach ($exportCSV as $record) {
@@ -1476,14 +1461,14 @@ if (!class_exists('dbConnect')) {
 				if ($bytes === false) {
 					$this->setError(sprintf(dbConnect_error_csv_file_put, __METHOD__, __LINE__,basename($csvFile_path)));
 					return false;
-				}		
+				}
 			}
 			fclose($handle);
 			return true;
     } // csvExport()
-    
+
     public function csvSetMustFields($mustFields=array()) {
-    	
+
     	if (empty($mustFields)) {
     		// Set Defaults
     		$must = $this->fields;
@@ -1494,29 +1479,29 @@ if (!class_exists('dbConnect')) {
     	else {
     		// use $mustFields
     		$must = array();
-    		foreach ($mustFields as $field) { 
+    		foreach ($mustFields as $field) {
     			if ((array_key_exists($field, $this->fields)) && ($field != $this->field_PrimaryKey)) {
-    				$must[$field] = ''; 
+    				$must[$field] = '';
     			}
     		}
     		if (sizeof($must) > 0) {
     			$this->csvMustFields = $must;
     			return true;
-    		} 
+    		}
     		else {
     			// Set Defaults
     			$must = $this->fields;
     			unset($must[$this->field_PrimaryKey]);
     			$this->csvMustFields = $must;
-    			return false;  		
+    			return false;
     		}
     	}
     } // csvSetMustFields()
-    
+
     public function csvGetMustFields() {
     	return $this->csvMustFields;
     }
-    
+
    	public function mySQLdate2datum($datetime) {
 	    if(strlen($datetime) == 10) {
 	      $result = substr($datetime, 8, 2);
@@ -1539,8 +1524,8 @@ if (!class_exists('dbConnect')) {
 	      return false;
 	    }
 		} // mySQLdate2datum()
-	
-   
+
+
   } // dbConnect
 
 } // class_exists()

@@ -1,25 +1,12 @@
 <?php
 
-/*
- Website Baker Project <http://www.websitebaker.org/>
- Copyright (C) 2004-2007, Ryan Djurovich
-
- Website Baker is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- Website Baker is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with Website Baker; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-*/
+/**
+ * dbConnect
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ * @link https://addons.phpmanufaktur.de/de/addons/dbconnect.php
+ * @copyright 2007-2012 phpManufaktur by Ralf Hertsch
+ * @license http://www.gnu.org/licenses/gpl.html GNU Public License (GPL)
+ */
 
 header('Location: ../../index.php');
-
-?>
