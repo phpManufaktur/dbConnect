@@ -1,5 +1,14 @@
 ### dbConnect
 
+0.36 - 2012-06-02
+
+* moved repository from SVN to GitHub
+* updated header informations
+* added CHANGELOG
+* added LICENSE
+* added README.md
+* removed info.txt
+
 0.35 - 2010-07-17
 
 * Added: destructor automaticly closing the database connection
