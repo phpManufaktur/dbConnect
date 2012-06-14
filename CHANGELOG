@@ -1,5 +1,9 @@
 ### dbConnect
 
+0.37 - 2012-06-14
+
+* removed WB version check
+
 0.36 - 2012-06-02
 
 * moved repository from SVN to GitHub

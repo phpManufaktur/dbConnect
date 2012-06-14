@@ -10,7 +10,6 @@
  */
 
 // Checking Requirements
-$PRECHECK['WB_VERSION'] = array('VERSION' => '2.7', 'OPERATOR' => '>=');
 $PRECHECK['PHP_VERSION'] = array('VERSION' => '5.2.0', 'OPERATOR' => '>=');
 $PRECHECK['PHP_EXTENSIONS'] = array('mysqli');
 

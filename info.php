@@ -12,7 +12,7 @@
 $module_directory     = 'dbconnect';
 $module_name          = 'dbConnect';
 $module_function      = 'snippet';
-$module_version       = '0.36';
+$module_version       = '0.37';
 $module_platform      = '2.7.x';
 $module_author        = 'Ralf Hertsch, Berlin (Germany)';
 $module_license       = 'GNU General Public License';
